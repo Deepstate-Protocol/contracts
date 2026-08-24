@@ -618,6 +618,48 @@ const SWAP_TEMPLATES: Record<string, IFormatEntry> = {
   swapTokensMultipleV3ERC20ToNative: undefined as unknown as IFormatEntry,
   swapTokensMultipleV3NativeToERC20: undefined as unknown as IFormatEntry,
   swapTokensGeneric: undefined as unknown as IFormatEntry,
+  swapTokensViaDeepstate: {
+    intent: 'Swap via Deepstate',
+    interpolatedIntent:
+      'Swap {_deepstateData.fromAmount} for at least {_minAmountOut} to {_receiver}',
+    fields: [
+      {
+        path: '_deepstateData.fromAmount',
+        label: 'Amount to Send',
+        format: 'tokenAmount',
+        params: { tokenPath: '_deepstateData.sendingAssetId' },
+        visible: 'always',
+      },
+      {
+        path: '_minAmountOut',
+        label: 'Minimum to Receive',
+        format: 'tokenAmount',
+        params: { tokenPath: '_deepstateData.receivingAssetId' },
+        visible: 'always',
+      },
+      {
+        path: '_receiver',
+        label: 'Recipient',
+        format: 'addressName',
+        params: { types: ['eoa', 'contract'], sources: ['local', 'ens'] },
+        visible: 'always',
+      },
+      { path: '_transactionId', label: 'Transaction Id', visible: 'never' },
+      { path: '_integrator', label: 'Integrator', visible: 'never' },
+      { path: '_referrer', label: 'Referrer', visible: 'never' },
+      {
+        path: '_deepstateData.deepstate',
+        label: 'Deepstate Engine',
+        format: 'addressName',
+        visible: 'never',
+      },
+      {
+        path: '_deepstateData.fills',
+        label: 'Deepstate Fill Instructions',
+        visible: 'never',
+      },
+    ],
+  },
 }
 // Derivation: same as ERC20ToERC20 but for Native variants the `fromAmount`
 // (or the @.value for the legacy descriptor) is replaced. We just reproduce
